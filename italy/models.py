@@ -26,10 +26,10 @@ class Italy(models.Model):
         return self.comune
 
 '''
-conversione wsg84 to lat lng
+all points in radius
+
 from django.contrib.gis.geos import Point
-pnt = Point(30, 50, srid=4326)#srid di standard wsg84 (lat, lng)
-desired_srid = 32140  23032#srid dello standard 
-pnt.transform(desired_srid)
-pnt.ewkt
+pnt = Point(14.252540,40.839981)
+radius = 20 #optimal radius > 20, time estimated 2 second
+Italy.objects.filter(mpoly__distance_lt=(pnt, Distance(km=radius)))
 '''
