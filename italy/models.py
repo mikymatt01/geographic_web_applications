@@ -24,12 +24,3 @@ class Italy(models.Model):
     # Returns the string representation of the model.
     def __str__(self):
         return self.comune
-
-'''
-all points in radius
-
-from django.contrib.gis.geos import Point
-pnt = Point(14.252540,40.839981)
-radius = 20 #optimal radius > 20, time estimated 2 second
-Italy.objects.filter(mpoly__distance_lt=(pnt, Distance(km=radius)))
-'''
