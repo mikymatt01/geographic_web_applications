@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-00vw$siuf%y6h^ho=gv(d5kw*%sn3i#hmv6=zvqio3m4#g*(47
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -79,10 +79,11 @@ WSGI_APPLICATION = 'geodjango.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'world',
+        'NAME': 'template_postgis',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
-        'HOST': 'localhost'
+        'HOST': 'db',
+        'PORT': '5432'
     },
 }
 
