@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+import psycopg2
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -76,17 +78,40 @@ WSGI_APPLICATION = 'geodjango.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+USE_POSTGRES = os.environ['USE_POSTGRES'] == 'TRUE'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'template_postgis',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'db',
-        'PORT': '5432'
-    },
-}
+if USE_POSTGRES:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.contrib.gis.db.backends.postgis',
+            'NAME': os.environ['DB_NAME'],
+            'USER': os.environ['DB_USER'],
+            'PASSWORD': os.environ['DB_PWD'],
+            'HOST': os.environ['DB_HOST'],
+            'PORT': os.environ['DB_PORT']
+        },
+    }
+    DATABASE_URL = os.environ['DATABASE_URL']
+
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+
+    import dj_database_url
+
+    db_from_env = dj_database_url.config(conn_max_age=600)
+
+    DATABASES['default'].update(db_from_env)
+    DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.contrib.gis.db.backends.postgis',
+            'NAME': 'template_postgis',
+            'USER': 'postgres',
+            'PASSWORD': 'postgres',
+            'HOST': 'db',
+            'PORT': '5432'
+        },
+    }
 
 
 # Password validation

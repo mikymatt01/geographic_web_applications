@@ -11,3 +11,8 @@ COPY requirements.txt /code/
 RUN pip3 install -r requirements.txt
 
 COPY . /code/
+
+ENV USE_POSTGRES=FALSE
+
+
+CMD gunicorn geodjango.wsgi --log-file -
