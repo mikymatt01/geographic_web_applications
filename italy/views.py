@@ -8,7 +8,7 @@ import json
 
 @api_view(['POST'])
 def borders(request):
-    data = json.loads(request.POST.dict()['_content'])
+    data = request.data
     if all(item in ['latitude', 'longitude', 'radius'] for item in list(data.keys())):
         pnt = Point(float(data['longitude']),float(data['latitude']))
         radius = int(data['radius']) #optimal radius > 20, time estimated 2 second
@@ -19,8 +19,7 @@ def borders(request):
 
 @api_view(['POST'])
 def geocoding(request):
-    data = json.loads(request.POST.dict()['_content'])
-    print(data)
+    data = request.data
     if all(item in ['latitude', 'longitude'] for item in list(data.keys())):
         pnt = Point(float(data['longitude']),float(data['latitude']))
         italy = Italy.objects.filter(mpoly__contains=pnt)
